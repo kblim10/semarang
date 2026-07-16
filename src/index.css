@@ -1,0 +1,179 @@
+:root {
+  /* Premium Cold / Blue Aesthetic */
+  --bg-color: #060b13; /* Deep dark blue */
+  --text-color: #f0f6fc;
+  --text-light: #8b9bb4;
+  
+  --brand-primary: #3b82f6; /* Ocean blue */
+  --brand-secondary: #0ea5e9; /* Sky blue */
+  --brand-accent: #60a5fa; /* Light blue */
+
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --card-border: rgba(255, 255, 255, 0.05);
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Utilities */
+.gradient-text {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary), var(--brand-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+}
+
+/* Responsive Classes */
+.section-padding {
+  padding: 10rem 2rem;
+}
+.hero-title {
+  font-size: clamp(3rem, 10vw, 7rem);
+  line-height: 1.1;
+  margin-bottom: 2rem;
+}
+.hero-desc {
+  font-size: 1.3rem;
+  max-width: 650px;
+  line-height: 1.8;
+  margin: 0 auto;
+}
+
+/* Timeline Layout */
+.timeline-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  padding: 12rem 2rem;
+}
+.timeline-line-wrapper {
+  position: absolute;
+  left: 2rem;
+  top: 12rem;
+  bottom: 12rem;
+  width: 2px;
+  background: var(--card-border);
+}
+.timeline-items-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+}
+.timeline-item {
+  padding-left: 4rem;
+  position: relative;
+}
+.timeline-dot {
+  position: absolute;
+  left: -8px; /* -8px because line is at 0 (relative to wrapper), width 2px -> center is 1px. Dot width 16px -> -7px or -8px aligns it */
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.message-card {
+  max-width: 850px;
+  padding: 5rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+}
+.message-title {
+  font-size: 3.5rem;
+  margin-bottom: 3rem;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 6rem 1.5rem;
+  }
+  .hero-desc {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+  .timeline-container {
+    padding: 6rem 1.5rem;
+  }
+  .timeline-line-wrapper {
+    left: 1.5rem; /* Match container padding */
+    top: 6rem;
+    bottom: 6rem;
+  }
+  .timeline-items-wrapper {
+    gap: 5rem;
+  }
+  .timeline-item {
+    padding-left: 2.5rem; /* Tighter on mobile */
+  }
+  .timeline-dot {
+    /* (1.5rem + 1px center of line) - padding left (1.5rem) = line is at x=0 relative to container content box */
+    /* So if item is at x=0, line is at x=0. Dot center needs to be at x=0. Dot width 16px -> left: -8px */
+    left: -7px; 
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    box-shadow: 0 0 0 4px var(--bg-color); /* Smaller shadow on mobile */
+  }
+  .timeline-item h3 {
+    font-size: 2rem !important;
+  }
+  .timeline-item p {
+    font-size: 1rem !important;
+  }
+  
+  .message-card {
+    padding: 3rem 1.5rem;
+    border-radius: 24px;
+  }
+  .message-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .message-card p {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: #3a2e2b;
+  border-radius: 4px;
+}
