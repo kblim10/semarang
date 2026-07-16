@@ -94,7 +94,7 @@ h1, h2, h3, h4 {
 }
 .timeline-dot {
   position: absolute;
-  left: -8px; /* -8px because line is at 0 (relative to wrapper), width 2px -> center is 1px. Dot width 16px -> -7px or -8px aligns it */
+  left: -8px;
   top: 8px;
   width: 16px;
   height: 16px;
@@ -127,7 +127,7 @@ h1, h2, h3, h4 {
     padding: 6rem 1.5rem;
   }
   .timeline-line-wrapper {
-    left: 1.5rem; /* Match container padding */
+    left: 1.5rem;
     top: 6rem;
     bottom: 6rem;
   }
@@ -135,16 +135,14 @@ h1, h2, h3, h4 {
     gap: 5rem;
   }
   .timeline-item {
-    padding-left: 2.5rem; /* Tighter on mobile */
+    padding-left: 2.5rem;
   }
   .timeline-dot {
-    /* (1.5rem + 1px center of line) - padding left (1.5rem) = line is at x=0 relative to container content box */
-    /* So if item is at x=0, line is at x=0. Dot center needs to be at x=0. Dot width 16px -> left: -8px */
     left: -7px; 
     top: 6px;
     width: 14px;
     height: 14px;
-    box-shadow: 0 0 0 4px var(--bg-color); /* Smaller shadow on mobile */
+    box-shadow: 0 0 0 4px var(--bg-color);
   }
   .timeline-item h3 {
     font-size: 2rem !important;
@@ -174,6 +172,6 @@ h1, h2, h3, h4 {
   background: var(--bg-color);
 }
 ::-webkit-scrollbar-thumb {
-  background: #3a2e2b;
+  background: #1e293b;
   border-radius: 4px;
 }

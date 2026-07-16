@@ -1,16 +1,24 @@
+"use client";
+
 import React, { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { MousePointer2, Coffee, Camera, Sparkles, Compass } from 'lucide-react';
-import './index.css';
+import { MousePointer2, Coffee, Camera, Compass } from 'lucide-react';
 
-const AnimatedSection = ({ children, className, delay = 0, style }) => {
+interface AnimatedSectionProps {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  style?: React.CSSProperties;
+}
+
+const AnimatedSection = ({ children, className, delay = 0, style }: AnimatedSectionProps) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-25% 0px -25% 0px" }} // Trigger persis saat elemen menyentuh batas bawah garis
+      viewport={{ once: true, margin: "-25% 0px -25% 0px" }}
       transition={{ 
-        duration: 0.5, // Jauh lebih cepat dan responsif
+        duration: 0.5,
         delay: delay,
         ease: "easeOut"
       }}
@@ -22,10 +30,9 @@ const AnimatedSection = ({ children, className, delay = 0, style }) => {
   );
 };
 
-export default function App() {
-  const timelineRef = useRef(null);
+export default function Home() {
+  const timelineRef = useRef<HTMLElement>(null);
   
-  // Garis akan mengisi seiring scroll, dan ujungnya akan tepat berada di 75% tinggi layar
   const { scrollYProgress: timelineProgress } = useScroll({
     target: timelineRef,
     offset: ["start 75%", "end 75%"]
@@ -41,7 +48,6 @@ export default function App() {
   const opacityHero = useTransform(globalScroll, [0, 0.1], [1, 0]);
   const yHero = useTransform(globalScroll, [0, 0.2], [0, 50]);
 
-  // Memaksa scroll kembali ke atas saat halaman di-refresh
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -79,7 +85,7 @@ export default function App() {
       <motion.section 
         className="section-padding hero-section"
         style={{ 
-          height: '100dvh', // Menggunakan dvh agar tidak tertutup bar hp
+          height: '100dvh',
           display: 'flex', 
           flexDirection: 'column',
           justifyContent: 'center',
