@@ -1,20 +1,37 @@
-import type { Metadata } from "next";
-import { Playfair_Display, Outfit } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Playfair_Display, DM_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-serif",
+  display: "swap",
 });
 
-const outfit = Outfit({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-hand",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Sampai Jumpa, Semarang",
-  description: "Terima kasih dan sampai jumpa, dari kami berempat.",
+  title: "Jejak yang Membeku · Semarang",
+  description:
+    "Sebuah memoar digital untuk kawan-kawan seperjalanan di Semarang. Terima kasih dan sampai jumpa.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#080c14",
 };
 
 export default function RootLayout({
@@ -23,7 +40,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${playfair.variable} ${outfit.variable}`}>
+    <html
+      lang="id"
+      className={`${playfair.variable} ${dmSans.variable} ${caveat.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

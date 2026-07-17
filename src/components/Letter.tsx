@@ -1,0 +1,84 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { letterParagraphs } from "@/data/content";
+
+function AnimatedParagraph({
+  text,
+  delayOffset,
+}: {
+  text: string;
+  delayOffset: number;
+}) {
+  const words = text.split(" ");
+
+  return (
+    <p className="flex flex-wrap justify-center gap-x-[0.4em] text-[clamp(1rem,2.6vw,1.35rem)] leading-[1.9] text-silver">
+      {words.map((word, i) => (
+        <motion.span
+          key={`${word}-${i}`}
+          initial={{ opacity: 0.08, filter: "blur(3px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+          transition={{
+            duration: 0.5,
+            delay: delayOffset + i * 0.035,
+            ease: "easeOut",
+          }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </p>
+  );
+}
+
+function computeDelayOffsets(paragraphs: string[]) {
+  const offsets: number[] = [];
+  let cumulative = 0;
+  for (const paragraph of paragraphs) {
+    offsets.push(cumulative);
+    cumulative += paragraph.split(" ").length * 0.035 + 0.25;
+  }
+  return offsets;
+}
+
+export function Letter() {
+  const delayOffsets = computeDelayOffsets(letterParagraphs);
+
+  return (
+    <section className="relative mx-auto max-w-3xl px-6 py-28 md:py-40">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-15%" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="mb-16 text-center"
+      >
+        <span className="text-[clamp(0.65rem,2vw,0.8rem)] uppercase tracking-[0.3em] text-ice-dim">
+          Sepucuk Surat
+        </span>
+        <h2 className="gradient-shimmer mt-4 font-serif text-[clamp(1.9rem,5.5vw,3rem)] font-semibold">
+          Surat untuk Kawan Seperjalanan
+        </h2>
+      </motion.div>
+
+      <div className="relative flex flex-col gap-8 rounded-[2rem] border border-white/[0.06] bg-navy-elevated/40 p-8 backdrop-blur-sm sm:p-12">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -top-10 left-6 select-none font-serif text-[8rem] leading-none text-white/[0.04] sm:text-[10rem]"
+        >
+          &ldquo;
+        </span>
+
+        {letterParagraphs.map((paragraph, index) => (
+          <AnimatedParagraph
+            key={index}
+            text={paragraph}
+            delayOffset={delayOffsets[index]}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}

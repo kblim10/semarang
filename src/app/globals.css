@@ -1,177 +1,202 @@
-:root {
-  /* Premium Cold / Blue Aesthetic */
-  --bg-color: #060b13; /* Deep dark blue */
-  --text-color: #f0f6fc;
-  --text-light: #8b9bb4;
-  
-  --brand-primary: #3b82f6; /* Ocean blue */
-  --brand-secondary: #0ea5e9; /* Sky blue */
-  --brand-accent: #60a5fa; /* Light blue */
+@import "tailwindcss";
 
-  --card-bg: rgba(255, 255, 255, 0.02);
-  --card-border: rgba(255, 255, 255, 0.05);
+@theme {
+    --color-navy: #080c14;
+    --color-navy-deep: #04060a;
+    --color-navy-elevated: #0d1420;
+    --color-navy-card: #101828;
+    --color-ice: #7dd3fc;
+    --color-ice-dim: #5aace8;
+    --color-indigo: #7a8bfa;
+    --color-violet: #9d8cf5;
+    --color-silver: #94a3b8;
+    --color-silver-dim: #64748b;
+    --color-offwhite: #eef2f7;
 
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Outfit', sans-serif;
+    --font-serif: var(--font-serif), Georgia, serif;
+    --font-sans: var(--font-sans), system-ui, sans-serif;
+    --font-hand: var(--font-hand), cursive;
+
+    --animate-drift: drift 18s ease-in-out infinite;
+    --animate-drift-slow: drift 28s ease-in-out infinite;
+    --animate-shimmer: shimmer 6s ease-in-out infinite;
+    --animate-grain: grain 8s steps(8) infinite;
+    --animate-pulse-soft: pulse-soft 5s ease-in-out infinite;
+
+    @keyframes drift {
+        0%,
+        100% {
+            transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+            transform: translate3d(2%, -3%, 0) scale(1.04);
+        }
+    }
+    @keyframes shimmer {
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+    @keyframes grain {
+        0% {
+            transform: translate(0, 0);
+        }
+        12.5% {
+            transform: translate(-4%, 2%);
+        }
+        25% {
+            transform: translate(3%, -3%);
+        }
+        37.5% {
+            transform: translate(-2%, 4%);
+        }
+        50% {
+            transform: translate(4%, 1%);
+        }
+        62.5% {
+            transform: translate(-3%, -2%);
+        }
+        75% {
+            transform: translate(2%, 3%);
+        }
+        87.5% {
+            transform: translate(-1%, -4%);
+        }
+        100% {
+            transform: translate(0, 0);
+        }
+    }
+    @keyframes pulse-soft {
+        0%,
+        100% {
+            opacity: 0.35;
+        }
+        50% {
+            opacity: 0.6;
+        }
+    }
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  line-height: 1.6;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+    background-color: var(--color-navy);
+    color: var(--color-offwhite);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.01em;
 }
 
-/* Utilities */
-.gradient-text {
-  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary), var(--brand-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* -------------------------------------------------- */
+/* Text glow / shimmer utilities                       */
+/* -------------------------------------------------- */
+.text-glow {
+    text-shadow:
+        0 0 18px rgba(125, 211, 252, 0.35),
+        0 0 42px rgba(122, 139, 250, 0.18);
 }
 
-.glass {
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--card-border);
-  border-radius: 24px;
+.gradient-shimmer {
+    background: linear-gradient(
+        100deg,
+        #eef2f7 0%,
+        #7dd3fc 25%,
+        #eef2f7 50%,
+        #9d8cf5 75%,
+        #eef2f7 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 7s ease-in-out infinite;
 }
 
-/* Responsive Classes */
-.section-padding {
-  padding: 10rem 2rem;
-}
-.hero-title {
-  font-size: clamp(3rem, 10vw, 7rem);
-  line-height: 1.1;
-  margin-bottom: 2rem;
-}
-.hero-desc {
-  font-size: 1.3rem;
-  max-width: 650px;
-  line-height: 1.8;
-  margin: 0 auto;
-}
-
-/* Timeline Layout */
-.timeline-container {
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  padding: 12rem 2rem;
-}
-.timeline-line-wrapper {
-  position: absolute;
-  left: 2rem;
-  top: 12rem;
-  bottom: 12rem;
-  width: 2px;
-  background: var(--card-border);
-}
-.timeline-items-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8rem;
-}
-.timeline-item {
-  padding-left: 4rem;
-  position: relative;
-}
-.timeline-dot {
-  position: absolute;
-  left: -8px;
-  top: 8px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  z-index: 2;
+/* -------------------------------------------------- */
+/* Film grain overlay                                  */
+/* -------------------------------------------------- */
+.grain-layer {
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("/noise.svg");
+    animation: grain 8s steps(8) infinite;
 }
 
-.message-card {
-  max-width: 850px;
-  padding: 5rem;
-  position: relative;
-  overflow: hidden;
-  border-radius: 32px;
-}
-.message-title {
-  font-size: 3.5rem;
-  margin-bottom: 3rem;
-}
-
-/* Mobile Adjustments */
-@media (max-width: 768px) {
-  .section-padding {
-    padding: 6rem 1.5rem;
-  }
-  .hero-desc {
-    font-size: 1.1rem;
-    padding: 0 1rem;
-  }
-  .timeline-container {
-    padding: 6rem 1.5rem;
-  }
-  .timeline-line-wrapper {
-    left: 1.5rem;
-    top: 6rem;
-    bottom: 6rem;
-  }
-  .timeline-items-wrapper {
-    gap: 5rem;
-  }
-  .timeline-item {
-    padding-left: 2.5rem;
-  }
-  .timeline-dot {
-    left: -7px; 
-    top: 6px;
-    width: 14px;
-    height: 14px;
-    box-shadow: 0 0 0 4px var(--bg-color);
-  }
-  .timeline-item h3 {
-    font-size: 2rem !important;
-  }
-  .timeline-item p {
-    font-size: 1rem !important;
-  }
-  
-  .message-card {
-    padding: 3rem 1.5rem;
-    border-radius: 24px;
-  }
-  .message-title {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-  }
-  .message-card p {
-    font-size: 1.1rem !important;
-  }
-}
-
-/* Scrollbar */
+/* -------------------------------------------------- */
+/* Scrollbar                                           */
+/* -------------------------------------------------- */
 ::-webkit-scrollbar {
-  width: 8px;
+    width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-color);
+    background: var(--color-navy);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
+    background: var(--color-navy-card);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-silver-dim);
+}
+
+/* -------------------------------------------------- */
+/* Polaroid tape corner                                */
+/* -------------------------------------------------- */
+.tape {
+    position: absolute;
+    width: 64px;
+    height: 24px;
+    background: linear-gradient(
+        135deg,
+        rgba(148, 163, 184, 0.35),
+        rgba(148, 163, 184, 0.15)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+}
+
+/* -------------------------------------------------- */
+/* Utility: hide scrollbar for swipe galleries          */
+/* -------------------------------------------------- */
+.no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
