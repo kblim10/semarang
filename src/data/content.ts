@@ -1,44 +1,45 @@
 export const badges = [
   "Chapter Semarang",
+  "Circle Jogging & Ngopi",
   "Kawan Seperjalanan",
-  "Angkatan 2026",
 ];
 
 export const timelineItems = [
   {
     tag: "Awal Mula",
-    title: "Datang Berempat",
-    body: "Semuanya bermula ketika kita berempat memutuskan menginjakkan kaki di Semarang. Modal cuma nekat dan minim pengalaman, tapi ekspektasi selangit. Kita sama sekali nggak punya bayangan kalau di kota ini kita bakal nemuin orang-orang se-frekuensi yang bikin betah.",
+    title: "Datang Berempat untuk Magang",
+    body: "Kami berempat merantau ke Semarang untuk magang, dengan bekal nekat dan harapan sederhana: semoga di kota asing ini kami nggak cuma kerja, tapi juga nemu kawan buat cerita.",
   },
   {
     tag: "Titik Temu",
-    title: "Hari Pertama Kita Saling Sapa",
-    body: "Lalu, kebetulan (atau memang sudah jalannya) mempertemukan kita dengan satu kawan baru. Awalnya kelihatan kalem dan biasa saja, tapi ternyata dialah kunci pembuka gerbang kehebohan yang nggak pernah kita duga sebelumnya.",
+    title: "Janji Jogging yang Jadi Awal Cerita",
+    body: "Dari obrolan singkat yang nggak disangka, muncul satu kawan baru. Awalnya cuma janji jogging pagi bareng, tapi dari situ obrolan terus berlanjut sampai jadi kebiasaan yang selalu kami tunggu setiap minggunya.",
   },
   {
     tag: "Eskalasi",
-    title: "Dari Satu, Jadi Rombongan",
-    body: "Dari satu kawan itu, tiba-tiba muncul teman yang lain. Terus bawa teman lagi. Kita yang tadinya cuma segelintir orang, mendadak jadi satu rombongan yang hobi nongkrong sampai lupa waktu. Semarang jadi jauh lebih hangat gara-gara kehadiran kalian.",
+    title: "Dari Satu, Jadi Serombongan",
+    body: "Satu kawan itu membawa beberapa kawan lain, dan entah kenapa semuanya langsung nyambung. Kami yang awalnya cuma berempat, mendadak punya circle baru yang selalu ada: jogging pagi, ngopi sampai malam, nugas bareng, sampai ketawa lepas untuk hal-hal receh.",
   },
   {
     tag: "Puncak Cerita",
-    title: "Rumah yang Kita Bangun Bersama",
-    body: "Sampai di titik ini, kota ini nggak lagi cuma soal tempat. Ada obrolan tengah malam, ada candaan yang cuma kita yang ngerti, ada circle yang berhasil bikin kita betah lebih lama dari rencana. Ini bukan cerita satu orang - ini cerita kita semua.",
+    title: "Kejutan yang Tak Pernah Kami Duga",
+    body: "Sampai suatu hari, circle ini diam-diam menyiapkan kejutan ulang tahun untuk salah satu dari kami. Momen kecil itu jadi bukti bahwa pertemanan yang tumbuh dari hal-hal sederhana bisa menjadi sesuatu yang benar-benar tulus.",
   },
 ];
 
 export const galleryItems = [
-  { caption: "nongkrong sampai lupa waktu" },
-  { caption: "circle paling rusuh se-Semarang" },
-  { caption: "tawa yang nggak ada abisnya" },
-  { caption: "obrolan absurd tengah malam" },
-  { caption: "rombongan dadakan yang solid" },
-  { caption: "kenangan yang nggak sempat difoto" },
+  { caption: "jogging pagi yang jadi rutinitas" },
+  { caption: "ngopi sampai larut malam" },
+  { caption: "nugas bareng, deadline mepet" },
+  { caption: "ketawa untuk hal-hal receh" },
+  { caption: "circle yang selalu solid" },
+  { caption: "kejutan yang bikin terharu" },
 ];
 
 export const letterParagraphs = [
-  "Buat semua kawan-kawan di Semarang, terima kasih sebesar-besarnya.",
-  "Terima kasih sudah mau menerima kami berempat masuk ke circle kalian. Terima kasih untuk semua obrolan absurd tengah malam, tawa lepas yang bikin lupa beban, dan waktu luang yang kalian korbankan untuk sekadar menemani kami main.",
-  "Dan yang tidak kalah penting, maaf. Maaf kalau selama kita main bersama ada salah omong, candaan yang kelewat batas, wacana nongkrong yang tak pernah kejadian, atau kami yang merepotkan dalam banyak hal.",
-  "Hari ini kami berempat pamit dari Semarang. Jarak memang akan menjauh, tapi pertemanan ini tidak akan berhenti hanya di sini.",
+  "Untuk circle kecil yang kami temukan di Semarang, terima kasih untuk semua hal sederhana yang jadi terasa luar biasa: jogging pagi, ngopi sampai larut, dan obrolan random yang nggak ada habisnya.",
+  "Terima kasih sudah menerima kami yang datang sebagai orang baru, lalu memperlakukan kami seperti sudah kenal lama. Terima kasih untuk waktu yang kalian sisihkan, entah untuk sekadar menemani nugas, mendengar cerita, atau tertawa bersama untuk hal-hal yang sebenarnya tidak penting tapi selalu berkesan.",
+  "Dan untuk kejutan yang diam-diam kalian siapkan di hari ulang tahun salah satu dari kami - terima kasih. Itu bukan sekadar soal kue atau kado, tapi bukti bahwa pertemanan ini nyata dan tulus.",
+  "Yang tak kalah penting, maaf. Maaf kalau ada waktu kami yang kurang, candaan yang kelewat batas, atau wacana nongkrong yang tak pernah kejadian.",
+  "Hari ini kami berempat pamit dari Semarang. Jarak memang akan menjauh, tapi cerita dan kebiasaan kecil yang kita bangun bersama tidak akan berhenti hanya di sini.",
 ];

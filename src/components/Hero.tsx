@@ -23,7 +23,10 @@ export function Hero() {
       ref={ref}
       className="relative flex h-[100dvh] flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
-      <motion.div style={{ scale, opacity, y, filter }} className="relative z-10">
+      <motion.div
+        style={{ scale, opacity, y, filter }}
+        className="relative z-10"
+      >
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,9 +56,11 @@ export function Hero() {
           transition={{ duration: 0.9, ease: "easeOut", delay: 0.4 }}
           className="mx-auto mt-6 max-w-xl text-[clamp(0.95rem,2.4vw,1.15rem)] leading-[1.8] text-silver"
         >
-          Waktu berlalu lebih cepat kalau kita bersenang-senang. Ini ruang kecil
-          untuk merayakan pertemuan tak terduga, tawa lepas, dan cerita yang
-          akan terus kita bawa, ke mana pun jalan masing-masing berikutnya.
+          Kami datang berempat untuk magang di kota asing, dan diam-diam
+          berharap menemukan kawan yang bikin waktu terasa lebih cepat. Ini
+          ruang kecil untuk merayakan pertemuan tak terduga, tawa lepas, dan
+          cerita yang akan terus kita bawa, ke mana pun jalan masing-masing
+          berikutnya.
         </motion.p>
 
         <motion.div

@@ -18,12 +18,13 @@ export function AmbientBackground() {
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // capping DPR keeps the canvas lighter on high-density phone screens
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
     const resize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
@@ -33,7 +34,7 @@ export function AmbientBackground() {
     resize();
 
     const isSmall = window.matchMedia("(max-width: 640px)").matches;
-    const count = isSmall ? 26 : 55;
+    const count = isSmall ? 14 : 30;
 
     const particles = Array.from({ length: count }, () => ({
       x: Math.random() * width,
@@ -50,7 +51,16 @@ export function AmbientBackground() {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    const draw = () => {
+    // particles drift slowly, so redrawing at ~30fps instead of every frame
+    // is visually identical but noticeably lighter on CPU/battery.
+    const frameInterval = 1000 / 30;
+    let lastFrameTime = 0;
+
+    const draw = (time: number) => {
+      raf = requestAnimationFrame(draw);
+      if (time - lastFrameTime < frameInterval) return;
+      lastFrameTime = time;
+
       ctx.clearRect(0, 0, width, height);
       for (const p of particles) {
         if (!prefersReducedMotion) {
@@ -65,7 +75,6 @@ export function AmbientBackground() {
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
-      raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
 
@@ -86,14 +95,14 @@ export function AmbientBackground() {
       {/* deep base gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(122,139,250,0.14),transparent),radial-gradient(ellipse_60%_50%_at_100%_100%,rgba(125,211,252,0.08),transparent)]" />
 
-      {/* drifting ambient orbs */}
-      <div className="animate-drift-slow absolute -left-[10%] top-[-15%] h-[55vw] w-[55vw] rounded-full bg-indigo/10 blur-[110px]" />
-      <div className="animate-drift absolute -right-[15%] top-[35%] h-[45vw] w-[45vw] rounded-full bg-ice/10 blur-[100px]" />
-      <div className="animate-drift-slow absolute bottom-[-20%] left-[20%] h-[50vw] w-[50vw] rounded-full bg-violet/8 blur-[120px]" />
+      {/* drifting ambient orbs - kept small/blurred but cheaper than before */}
+      <div className="animate-drift-slow absolute -left-[10%] top-[-15%] h-[45vw] w-[45vw] rounded-full bg-indigo/10 blur-[80px]" />
+      <div className="animate-drift absolute -right-[15%] top-[35%] h-[38vw] w-[38vw] rounded-full bg-ice/10 blur-[70px]" />
+      <div className="animate-drift-slow absolute bottom-[-20%] left-[20%] h-[42vw] w-[42vw] rounded-full bg-violet/8 blur-[85px]" />
 
-      {/* faint floating grid, like a frozen frame of memory */}
+      {/* faint floating grid, like a frozen frame of memory - desktop only */}
       <div
-        className="animate-drift-slow absolute inset-[-10%] opacity-[0.05]"
+        className="animate-drift-slow absolute inset-[-10%] hidden opacity-[0.05] md:block"
         style={{
           backgroundImage:
             "linear-gradient(rgba(125,211,252,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(125,211,252,0.6) 1px, transparent 1px)",

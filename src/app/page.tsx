@@ -8,6 +8,7 @@ import { Gallery } from "@/components/Gallery";
 import { Letter } from "@/components/Letter";
 import { Footer } from "@/components/Footer";
 import { AudioPlayer } from "@/components/AudioPlayer";
+import { SpotifyCard } from "@/components/SpotifyCard";
 
 export default function Home() {
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function Home() {
 
       <div className="relative z-10">
         <Hero />
+        <SpotifyCard />
         <Timeline />
         <Gallery />
         <Letter />

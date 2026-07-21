@@ -147,6 +147,15 @@ h4 {
     animation: grain 8s steps(8) infinite;
 }
 
+/* keep grain static on small screens - the repaint cost of animating a
+     full-viewport layer isn't worth it on limited mobile hardware */
+@media (max-width: 767px) {
+    .grain-layer {
+        animation: none;
+        opacity: 0.035;
+    }
+}
+
 /* -------------------------------------------------- */
 /* Scrollbar                                           */
 /* -------------------------------------------------- */
