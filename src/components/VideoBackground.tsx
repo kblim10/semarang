@@ -14,27 +14,54 @@ export function VideoBackground() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { isPlaying } = useThemeSong();
   const [videoError, setVideoError] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
+    // Log untuk debugging
+    console.log("VideoBackground mounted, video element:", video);
+    console.log("Video src:", video.src);
+
+    const handleLoadedData = () => {
+      console.log("Video loaded successfully!");
+      setVideoLoaded(true);
+    };
+
+    const handleError = (e: Event) => {
+      console.error("Video failed to load:", e);
+      console.error("Video error code:", video.error?.code);
+      console.error("Video error message:", video.error?.message);
+      setVideoError(true);
+    };
+
+    video.addEventListener("loadeddata", handleLoadedData);
+    video.addEventListener("error", handleError);
+
+    return () => {
+      video.removeEventListener("loadeddata", handleLoadedData);
+      video.removeEventListener("error", handleError);
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoLoaded) return;
+
+    console.log("isPlaying changed:", isPlaying);
+
     // Sync video playback with audio state
     if (isPlaying && !videoError) {
-      video.play().catch(() => {
-        // Autoplay might be blocked, silently handle
-        console.log("Video autoplay was prevented");
+      video.play().catch((err) => {
+        console.log("Video autoplay was prevented:", err);
       });
     } else {
       video.pause();
     }
-  }, [isPlaying, videoError]);
+  }, [isPlaying, videoError, videoLoaded]);
 
-  // Don't render if video failed to load
-  if (videoError) {
-    return null;
-  }
-
+  // Always render the component, even if error (for debugging)
   return (
     <div
       aria-hidden
@@ -48,7 +75,6 @@ export function VideoBackground() {
           muted
           playsInline
           preload="auto"
-          onError={() => setVideoError(true)}
           className="min-h-full min-w-full object-cover opacity-30"
           style={{
             // For portrait videos on desktop: center and cover
@@ -59,7 +85,18 @@ export function VideoBackground() {
         >
           <source src="/video/background.mp4" type="video/mp4" />
           <source src="/video/background.webm" type="video/webm" />
+          {/* Fallback text for browsers that don't support video */}
+          Your browser does not support the video tag.
         </video>
+
+        {/* Debug overlay - remove after testing */}
+        {process.env.NODE_ENV === "development" && (
+          <div className="absolute bottom-4 left-4 z-50 rounded bg-black/80 p-2 text-xs text-white">
+            <div>Video Error: {videoError ? "YES" : "NO"}</div>
+            <div>Video Loaded: {videoLoaded ? "YES" : "NO"}</div>
+            <div>Is Playing: {isPlaying ? "YES" : "NO"}</div>
+          </div>
+        )}
       </div>
 
       {/* Dark overlay to keep video subtle and not overpower content */}
