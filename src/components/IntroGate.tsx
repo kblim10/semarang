@@ -5,11 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Headphones } from "lucide-react";
 import { AudioTrackCard } from "./AudioTrackCard";
 import { useThemeSong } from "@/lib/ThemeSongProvider";
-import { themeSong } from "@/data/content";
 
 type Stage = "loading" | "song";
-
-const SESSION_KEY = "semarang-intro-seen";
 
 interface IntroGateProps {
   onDone: () => void;
@@ -25,6 +22,9 @@ interface IntroGateProps {
  * Now also ensures all media assets (audio file, cover art) are fully
  * loaded before advancing to the song stage, preventing content popping
  * or stuttering once the main experience begins.
+ *
+ * ALWAYS shows intro on every page load/reload to ensure clean state
+ * and prevent stale audio bugs.
  */
 export function IntroGate({ onDone }: IntroGateProps) {
   const [stage, setStage] = useState<Stage>("loading");
@@ -33,14 +33,6 @@ export function IntroGate({ onDone }: IntroGateProps) {
   const [coverArtReady, setCoverArtReady] = useState(false);
 
   useEffect(() => {
-    // one-time read of an external system (sessionStorage) to decide whether
-    // a returning visitor should skip the intro ritual entirely.
-    if (sessionStorage.getItem(SESSION_KEY)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setVisible(false);
-      return;
-    }
-
     let cancelled = false;
 
     // Preload the cover art image
@@ -74,7 +66,6 @@ export function IntroGate({ onDone }: IntroGateProps) {
   }, [audioReady, coverArtReady]);
 
   function handleContinue() {
-    sessionStorage.setItem(SESSION_KEY, "1");
     play();
     setVisible(false);
   }

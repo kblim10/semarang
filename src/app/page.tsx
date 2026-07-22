@@ -16,10 +16,24 @@ export default function Home() {
   const [contentReady, setContentReady] = useState(false);
 
   useEffect(() => {
+    // Clear scroll restoration to always start from top
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
     window.scrollTo(0, 0);
+
+    // Clear all storage to ensure fresh state on every load
+    // This prevents stale audio state bugs after reload
+    sessionStorage.clear();
+    
+    // Clear service worker caches if they exist (for PWA/cached builds)
+    if ("caches" in window) {
+      caches.keys().then((names) => {
+        names.forEach((name) => {
+          caches.delete(name);
+        });
+      });
+    }
   }, []);
 
   return (

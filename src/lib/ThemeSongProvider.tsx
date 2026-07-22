@@ -53,6 +53,11 @@ export function ThemeSongProvider({
     audio.preload = "auto";
     audio.volume = ELEMENT_VOLUME;
     audio.crossOrigin = "anonymous";
+    
+    // Add timestamp to force fresh load, bypass any browser cache
+    const freshSrc = `${themeSong.src}?t=${Date.now()}`;
+    audio.src = freshSrc;
+    
     audioRef.current = audio;
 
     const onLoaded = () => setDuration(audio.duration || 0);
@@ -75,8 +80,17 @@ export function ThemeSongProvider({
     // safety net: never let a slow network hold the intro hostage
     const readyTimeout = window.setTimeout(onReady, 6000);
 
+    // Handle page visibility changes - pause when hidden, prepare to resume when visible
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        audio.pause();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       audio.pause();
+      audio.src = ""; // Release the audio resource
       window.clearTimeout(readyTimeout);
       audio.removeEventListener("loadedmetadata", onLoaded);
       audio.removeEventListener("timeupdate", onTime);
@@ -84,6 +98,7 @@ export function ThemeSongProvider({
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("error", onError);
       audio.removeEventListener("canplaythrough", onReady);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       audioContextRef.current?.close();
     };
   }, []);
