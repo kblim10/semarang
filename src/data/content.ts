@@ -1,3 +1,14 @@
+/**
+ * Custom, self-hosted theme song (replaces the old Spotify embed - it was
+ * heavy and hard to restyle). Drop an actual audio file at
+ * `public/audio/theme-song.mp3` and edit the title/artist below.
+ */
+export const themeSong = {
+  title: "Ganti dengan judul lagu",
+  artist: "Ganti dengan nama artis",
+  src: "/audio/theme-song.mp3",
+};
+
 export const badges = [
   "Chapter Semarang",
   "Circle Jogging & Ngopi",

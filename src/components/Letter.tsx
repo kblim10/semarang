@@ -1,51 +1,45 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { letterParagraphs } from "@/data/content";
 
-function AnimatedParagraph({
-  text,
-  delayOffset,
-}: {
-  text: string;
-  delayOffset: number;
-}) {
+const paragraphVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.035 },
+  },
+};
+
+const wordVariants: Variants = {
+  hidden: { opacity: 0.08, filter: "blur(3px)" },
+  visible: {
+    opacity: 1,
+    filter: "blur(0px)",
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+function AnimatedParagraph({ text }: { text: string }) {
   const words = text.split(" ");
 
   return (
-    <p className="flex flex-wrap justify-center gap-x-[0.4em] text-[clamp(1rem,2.6vw,1.35rem)] leading-[1.9] text-silver">
+    <motion.p
+      variants={paragraphVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+      className="flex flex-wrap justify-center gap-x-[0.4em] text-[clamp(1rem,2.6vw,1.35rem)] leading-[1.9] text-silver"
+    >
       {words.map((word, i) => (
-        <motion.span
-          key={`${word}-${i}`}
-          initial={{ opacity: 0.08, filter: "blur(3px)" }}
-          whileInView={{ opacity: 1, filter: "blur(0px)" }}
-          viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
-          transition={{
-            duration: 0.5,
-            delay: delayOffset + i * 0.035,
-            ease: "easeOut",
-          }}
-        >
+        <motion.span key={`${word}-${i}`} variants={wordVariants}>
           {word}
         </motion.span>
       ))}
-    </p>
+    </motion.p>
   );
 }
 
-function computeDelayOffsets(paragraphs: string[]) {
-  const offsets: number[] = [];
-  let cumulative = 0;
-  for (const paragraph of paragraphs) {
-    offsets.push(cumulative);
-    cumulative += paragraph.split(" ").length * 0.035 + 0.25;
-  }
-  return offsets;
-}
-
 export function Letter() {
-  const delayOffsets = computeDelayOffsets(letterParagraphs);
-
   return (
     <section className="relative mx-auto max-w-3xl px-6 py-28 md:py-40">
       <motion.div
@@ -72,11 +66,7 @@ export function Letter() {
         </span>
 
         {letterParagraphs.map((paragraph, index) => (
-          <AnimatedParagraph
-            key={index}
-            text={paragraph}
-            delayOffset={delayOffsets[index]}
-          />
+          <AnimatedParagraph key={index} text={paragraph} />
         ))}
       </div>
     </section>

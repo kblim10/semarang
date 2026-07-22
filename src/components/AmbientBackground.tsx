@@ -81,9 +81,22 @@ export function AmbientBackground() {
     const onResize = () => resize();
     window.addEventListener("resize", onResize);
 
+    // pause the loop entirely while the tab is in the background - no point
+    // burning CPU/battery on a canvas nobody is looking at.
+    const onVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+      } else {
+        lastFrameTime = 0;
+        raf = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 
@@ -95,10 +108,9 @@ export function AmbientBackground() {
       {/* deep base gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(122,139,250,0.14),transparent),radial-gradient(ellipse_60%_50%_at_100%_100%,rgba(125,211,252,0.08),transparent)]" />
 
-      {/* drifting ambient orbs - kept small/blurred but cheaper than before */}
-      <div className="animate-drift-slow absolute -left-[10%] top-[-15%] h-[45vw] w-[45vw] rounded-full bg-indigo/10 blur-[80px]" />
-      <div className="animate-drift absolute -right-[15%] top-[35%] h-[38vw] w-[38vw] rounded-full bg-ice/10 blur-[70px]" />
-      <div className="animate-drift-slow absolute bottom-[-20%] left-[20%] h-[42vw] w-[42vw] rounded-full bg-violet/8 blur-[85px]" />
+      {/* drifting ambient orbs - just two, kept small/blurred to stay cheap */}
+      <div className="animate-drift-slow absolute -left-[10%] top-[-15%] h-[42vw] w-[42vw] rounded-full bg-indigo/10 blur-[70px]" />
+      <div className="animate-drift absolute -right-[15%] top-[35%] h-[36vw] w-[36vw] rounded-full bg-ice/10 blur-[60px]" />
 
       {/* faint floating grid, like a frozen frame of memory - desktop only */}
       <div

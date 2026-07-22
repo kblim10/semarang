@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { Hero } from "@/components/Hero";
 import { Timeline } from "@/components/Timeline";
@@ -8,9 +8,13 @@ import { Gallery } from "@/components/Gallery";
 import { Letter } from "@/components/Letter";
 import { Footer } from "@/components/Footer";
 import { AudioPlayer } from "@/components/AudioPlayer";
-import { SpotifyCard } from "@/components/SpotifyCard";
+import { IntroGate } from "@/components/IntroGate";
+import { FloatingSongMini } from "@/components/FloatingSongMini";
+import { ThemeSongProvider } from "@/lib/ThemeSongProvider";
 
 export default function Home() {
+  const [contentReady, setContentReady] = useState(false);
+
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
@@ -19,19 +23,29 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="relative">
-      <AmbientBackground />
+    <ThemeSongProvider>
+      <main className="relative">
+        {!contentReady && (
+          <IntroGate onDone={() => setContentReady(true)} />
+        )}
 
-      <div className="relative z-10">
-        <Hero />
-        <SpotifyCard />
-        <Timeline />
-        <Gallery />
-        <Letter />
-        <Footer />
-      </div>
+        {contentReady && (
+          <>
+            <AmbientBackground />
 
-      <AudioPlayer />
-    </main>
+            <div className="relative z-10">
+              <Hero />
+              <Timeline />
+              <Gallery />
+              <Letter />
+              <Footer />
+            </div>
+
+            <FloatingSongMini />
+            <AudioPlayer />
+          </>
+        )}
+      </main>
+    </ThemeSongProvider>
   );
 }
