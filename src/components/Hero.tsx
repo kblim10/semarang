@@ -21,7 +21,7 @@ export function Hero() {
   return (
     <section
       ref={ref}
-      className="relative flex h-[100dvh] flex-col items-center justify-center overflow-hidden px-6 text-center"
+      className="relative flex h-dvh snap-start snap-always flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
       <motion.div
         style={{ scale, opacity, y, filter }}

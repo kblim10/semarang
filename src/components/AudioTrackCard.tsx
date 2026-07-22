@@ -1,6 +1,7 @@
 "use client";
 
-import { Music2, Pause, Play } from "lucide-react";
+import Image from "next/image";
+import { Pause, Play } from "lucide-react";
 import { themeSong } from "@/data/content";
 import { cn } from "@/lib/cn";
 import { useThemeSong } from "@/lib/ThemeSongProvider";
@@ -36,11 +37,17 @@ export function AudioTrackCard({ variant = "mini" }: AudioTrackCardProps) {
       <div className="flex items-center gap-3">
         <div
           className={cn(
-            "flex flex-shrink-0 items-center justify-center rounded-xl bg-navy-card text-ice",
+            "relative flex-shrink-0 overflow-hidden rounded-xl bg-navy-card",
             isLarge ? "h-14 w-14" : "h-10 w-10",
           )}
         >
-          <Music2 size={isLarge ? 26 : 18} strokeWidth={1.4} />
+          <Image
+            src="/audio/bg%20music.png"
+            alt=""
+            fill
+            sizes={isLarge ? "56px" : "40px"}
+            className="object-cover"
+          />
         </div>
 
         <div className="min-w-0 flex-1 text-left">

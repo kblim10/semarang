@@ -5,7 +5,7 @@ import { Users } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/[0.06] px-6 py-20 text-center md:py-28">
+    <footer className="relative snap-start border-t border-white/[0.06] px-6 py-20 text-center md:py-28">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

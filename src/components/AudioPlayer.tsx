@@ -79,7 +79,13 @@ export function AudioPlayer() {
   }
 
   return (
-    <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-8 sm:right-8">
+    <div
+      className="fixed z-50 flex flex-col items-end gap-3"
+      style={{
+        bottom: "max(1.25rem, env(safe-area-inset-bottom))",
+        right: "max(1.25rem, env(safe-area-inset-right))",
+      }}
+    >
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -125,7 +131,7 @@ export function AudioPlayer() {
           onClick={toggleAudio}
           whileTap={{ scale: 0.92 }}
           aria-label={isOn ? "Matikan ambient sound" : "Nyalakan ambient sound"}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-navy-elevated/80 text-ice shadow-[0_10px_30px_rgba(0,0,0,0.4)] backdrop-blur-md"
+          className="relative flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border border-white/15 bg-navy-elevated/95 text-ice shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-md"
         >
           {isOn && (
             <motion.span

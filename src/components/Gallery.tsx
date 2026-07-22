@@ -9,7 +9,7 @@ export function Gallery() {
   const tiltEnabled = useHoverCapable();
 
   return (
-    <section className="relative mx-auto max-w-6xl px-0 py-28 md:py-36">
+    <section className="relative h-dvh snap-start snap-always overflow-y-auto mx-auto max-w-6xl px-0 py-28 md:py-36">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -29,10 +29,7 @@ export function Gallery() {
         </p>
       </motion.div>
 
-      <div
-        className="no-scrollbar flex gap-6 overflow-x-auto px-5 pb-6 [perspective:1400px] sm:px-8 md:flex-wrap md:justify-center md:overflow-visible md:px-8"
-        style={{ scrollSnapType: "x mandatory" }}
-      >
+      <div className="flex flex-col items-center gap-8 px-5 [perspective:1400px] sm:px-8 md:flex-row md:flex-wrap md:justify-center md:gap-6 md:px-8">
         {galleryItems.map((item, index) => (
           <PolaroidCard
             key={item.caption}

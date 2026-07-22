@@ -5,7 +5,7 @@ import { timelineItems } from "@/data/content";
 
 export function Timeline() {
   return (
-    <section className="relative mx-auto max-w-5xl px-5 py-28 sm:px-8 md:py-40">
+    <section className="relative h-dvh snap-start snap-always overflow-y-auto mx-auto max-w-5xl px-5 py-28 sm:px-8 md:py-40">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

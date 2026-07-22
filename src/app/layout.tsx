@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${playfair.variable} ${dmSans.variable} ${caveat.variable}`}
+      className={`${playfair.variable} ${dmSans.variable} ${caveat.variable} snap-y snap-mandatory`}
     >
       <body>{children}</body>
     </html>

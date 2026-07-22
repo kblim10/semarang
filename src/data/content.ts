@@ -4,8 +4,8 @@
  * `public/audio/theme-song.mp3` and edit the title/artist below.
  */
 export const themeSong = {
-  title: "Ganti dengan judul lagu",
-  artist: "Ganti dengan nama artis",
+  title: "Sampai Jadi Debu",
+  artist: "Banda Neira",
   src: "/audio/theme-song.mp3",
 };
 
