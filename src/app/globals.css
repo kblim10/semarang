@@ -132,7 +132,7 @@ h4 {
 }
 
 /* -------------------------------------------------- */
-/* Film grain overlay                                  */
+/* Film grain overlay - mix-blend-mode removed for better performance */
 /* -------------------------------------------------- */
 .grain-layer {
     position: fixed;
@@ -141,8 +141,7 @@ h4 {
     height: 200%;
     pointer-events: none;
     z-index: 2;
-    opacity: 0.05;
-    mix-blend-mode: overlay;
+    opacity: 0.04;
     background-image: url("/noise.svg");
     animation: grain 8s steps(8) infinite;
 }
@@ -152,7 +151,7 @@ h4 {
 @media (max-width: 767px) {
     .grain-layer {
         animation: none;
-        opacity: 0.035;
+        opacity: 0.03;
     }
 }
 

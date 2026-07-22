@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Headphones } from "lucide-react";
 import { AudioTrackCard } from "./AudioTrackCard";
 import { useThemeSong } from "@/lib/ThemeSongProvider";
+import { themeSong } from "@/data/content";
 
 type Stage = "loading" | "song";
 
@@ -19,11 +21,16 @@ interface IntroGateProps {
  * the particle background / timeline / gallery until this fully exits, so
  * the very first paint stays cheap and the site never feels like it's
  * fighting the browser on open.
+ *
+ * Now also ensures all media assets (audio file, cover art) are fully
+ * loaded before advancing to the song stage, preventing content popping
+ * or stuttering once the main experience begins.
  */
 export function IntroGate({ onDone }: IntroGateProps) {
   const [stage, setStage] = useState<Stage>("loading");
   const [visible, setVisible] = useState(true);
-  const { play } = useThemeSong();
+  const { play, audioReady } = useThemeSong();
+  const [coverArtReady, setCoverArtReady] = useState(false);
 
   useEffect(() => {
     // one-time read of an external system (sessionStorage) to decide whether
@@ -35,18 +42,36 @@ export function IntroGate({ onDone }: IntroGateProps) {
     }
 
     let cancelled = false;
+
+    // Preload the cover art image
+    const coverImg = new Image();
+    coverImg.onload = () => setCoverArtReady(true);
+    coverImg.onerror = () => setCoverArtReady(true); // proceed anyway if it fails
+    coverImg.src = "/audio/bg music.png";
+
     const fontsReady =
       "fonts" in document ? document.fonts.ready : Promise.resolve();
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 1200));
 
+    // Wait for fonts, audio, cover art, and minimum delay
     Promise.all([fontsReady, minimumDelay]).then(() => {
-      if (!cancelled) setStage("song");
+      // Additional check: ensure audio and cover art are ready
+      const checkAssets = () => {
+        if (cancelled) return;
+        if (audioReady && coverArtReady) {
+          setStage("song");
+        } else {
+          // Retry check in 100ms if assets aren't ready yet
+          setTimeout(checkAssets, 100);
+        }
+      };
+      checkAssets();
     });
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [audioReady, coverArtReady]);
 
   function handleContinue() {
     sessionStorage.setItem(SESSION_KEY, "1");
@@ -109,6 +134,19 @@ export function IntroGate({ onDone }: IntroGateProps) {
                     Putar dulu lagu ini
                   </h2>
                 </div>
+
+                {/* Headphone recommendation */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex items-center gap-2.5 text-silver-dim"
+                >
+                  <Headphones size={18} className="text-ice/60" />
+                  <span className="text-xs tracking-wide">
+                    Best experienced with headphones
+                  </span>
+                </motion.div>
 
                 <AudioTrackCard variant="large" />
 

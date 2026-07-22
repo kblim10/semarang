@@ -31,7 +31,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 backdrop-blur-md"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-navy-elevated/90 px-5 py-2"
         >
           <Users size={16} className="text-ice" />
           <span className="text-[clamp(0.65rem,2vw,0.8rem)] uppercase tracking-[0.25em] text-silver">

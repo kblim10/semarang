@@ -108,9 +108,9 @@ export function AmbientBackground() {
       {/* deep base gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(122,139,250,0.14),transparent),radial-gradient(ellipse_60%_50%_at_100%_100%,rgba(125,211,252,0.08),transparent)]" />
 
-      {/* drifting ambient orbs - just two, kept small/blurred to stay cheap */}
-      <div className="animate-drift-slow absolute -left-[10%] top-[-15%] h-[42vw] w-[42vw] rounded-full bg-indigo/10 blur-[70px]" />
-      <div className="animate-drift absolute -right-[15%] top-[35%] h-[36vw] w-[36vw] rounded-full bg-ice/10 blur-[60px]" />
+      {/* drifting ambient orbs - replaced blur with pure CSS gradient for better performance */}
+      <div className="animate-drift-slow absolute -left-[10%] top-[-15%] h-[42vw] w-[42vw] rounded-full bg-[radial-gradient(circle,rgba(122,139,250,0.18)_0%,rgba(122,139,250,0.08)_50%,transparent_80%)]" />
+      <div className="animate-drift absolute -right-[15%] top-[35%] h-[36vw] w-[36vw] rounded-full bg-[radial-gradient(circle,rgba(125,211,252,0.16)_0%,rgba(125,211,252,0.08)_50%,transparent_80%)]" />
 
       {/* faint floating grid, like a frozen frame of memory - desktop only */}
       <div

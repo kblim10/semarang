@@ -57,7 +57,7 @@ export function Letter() {
         </h2>
       </motion.div>
 
-      <div className="relative flex flex-col gap-8 rounded-[2rem] border border-white/[0.06] bg-navy-elevated/40 p-8 backdrop-blur-sm sm:p-12">
+      <div className="relative flex flex-col gap-8 rounded-[2rem] border border-white/[0.06] bg-navy-elevated/75 p-8 sm:p-12">
         <span
           aria-hidden
           className="pointer-events-none absolute -top-10 left-6 select-none font-serif text-[8rem] leading-none text-white/[0.04] sm:text-[10rem]"

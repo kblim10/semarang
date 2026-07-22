@@ -30,7 +30,7 @@ export function AudioTrackCard({ variant = "mini" }: AudioTrackCardProps) {
   return (
     <div
       className={cn(
-        "rounded-2xl border border-white/10 bg-white/[0.04] shadow-[0_25px_55px_rgba(0,0,0,0.5)] backdrop-blur-md",
+        "rounded-2xl border border-white/10 bg-navy-elevated/85 shadow-[0_25px_55px_rgba(0,0,0,0.5)]",
         isLarge ? "w-full max-w-sm p-6" : "w-64 p-3",
       )}
     >
