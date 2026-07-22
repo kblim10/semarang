@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { IntroGate } from "@/components/IntroGate";
 import { FloatingSongMini } from "@/components/FloatingSongMini";
+import { VideoBackground } from "@/components/VideoBackground";
 import { ThemeSongProvider } from "@/lib/ThemeSongProvider";
 
 export default function Home() {
@@ -46,6 +47,7 @@ export default function Home() {
         {contentReady && (
           <>
             <AmbientBackground />
+            <VideoBackground />
 
             <div className="relative z-10">
               <Hero />
