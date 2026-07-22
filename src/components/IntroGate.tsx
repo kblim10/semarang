@@ -77,9 +77,31 @@ export function IntroGate({ onDone }: IntroGateProps) {
           key="intro"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-navy-deep px-6 text-center"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center px-6 text-center"
         >
-          <AnimatePresence mode="wait">
+          {/* Video background for intro */}
+          {stage === "song" && (
+            <div className="absolute inset-0 z-0">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="h-full w-full object-cover opacity-40"
+              >
+                <source src="/video/background.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/80 via-navy-deep/70 to-navy-deep/85" />
+            </div>
+          )}
+
+          {/* Non-video background for loading stage */}
+          {stage === "loading" && (
+            <div className="absolute inset-0 z-0 bg-navy-deep" />
+          )}
+
+          <div className="relative z-10">
+            <AnimatePresence mode="wait">
             {stage === "loading" ? (
               <motion.div
                 key="loading"
@@ -150,6 +172,7 @@ export function IntroGate({ onDone }: IntroGateProps) {
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

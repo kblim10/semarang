@@ -8,12 +8,29 @@ const DISPLAY_DURATION = 4000; // 4 seconds per item
 const VIDEO_CLIP_DURATION = 4; // Play 4 seconds of video per show
 
 // Define your media items here
+// Add your video and image files from public/images/ folder
 const MEDIA_ITEMS = [
-  { type: "video" as const, src: "/video/background.mp4" },
-  { type: "image" as const, src: "/images/memory-1.jpg" },
-  { type: "image" as const, src: "/images/memory-2.jpg" },
-  { type: "image" as const, src: "/images/memory-3.jpg" },
-  // Add more media items here
+  // Videos
+  { type: "video" as const, src: "/images/1 (1).mp4" },
+  { type: "video" as const, src: "/images/1 (2).mp4" },
+  
+  // Images
+  { type: "image" as const, src: "/images/1 (1).jpeg" },
+  { type: "image" as const, src: "/images/1 (2).jpeg" },
+  { type: "image" as const, src: "/images/1 (3).jpeg" },
+  { type: "image" as const, src: "/images/1 (4).jpeg" },
+  { type: "image" as const, src: "/images/1 (5).jpeg" },
+  { type: "image" as const, src: "/images/1 (6).jpeg" },
+  { type: "image" as const, src: "/images/1 (7).jpeg" },
+  { type: "image" as const, src: "/images/1 (8).jpeg" },
+  { type: "image" as const, src: "/images/1 (9).jpeg" },
+  { type: "image" as const, src: "/images/1 (10).jpeg" },
+  { type: "image" as const, src: "/images/1 (11).jpeg" },
+  { type: "image" as const, src: "/images/1 (12).jpeg" },
+  { type: "image" as const, src: "/images/1 (13).jpeg" },
+  { type: "image" as const, src: "/images/1 (14).jpeg" },
+  { type: "image" as const, src: "/images/1 (15).jpeg" },
+  { type: "image" as const, src: "/images/1 (16).jpeg" },
 ];
 
 /**
