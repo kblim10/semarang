@@ -41,7 +41,7 @@ function AnimatedParagraph({ text }: { text: string }) {
 
 export function Letter() {
   return (
-    <section className="relative h-dvh snap-start snap-always overflow-y-auto mx-auto max-w-3xl px-6 py-28 md:py-40">
+    <section className="relative mx-auto max-w-3xl px-6 py-28 md:py-40">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

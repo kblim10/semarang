@@ -9,7 +9,7 @@ export function Gallery() {
   const tiltEnabled = useHoverCapable();
 
   return (
-    <section className="relative h-dvh snap-start snap-always overflow-y-auto mx-auto max-w-6xl px-0 py-28 md:py-36">
+    <section className="relative mx-auto max-w-6xl px-0 py-28 md:py-36">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

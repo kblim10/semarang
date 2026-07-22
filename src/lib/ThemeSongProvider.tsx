@@ -32,11 +32,7 @@ const ThemeSongContext = createContext<ThemeSongState | null>(null);
 const ELEMENT_VOLUME = 1;
 const LOUDNESS_BOOST = 1.7;
 
-export function ThemeSongProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function ThemeSongProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const fadeGainRef = useRef<GainNode | null>(null);
@@ -53,11 +49,6 @@ export function ThemeSongProvider({
     audio.preload = "auto";
     audio.volume = ELEMENT_VOLUME;
     audio.crossOrigin = "anonymous";
-    
-    // Add timestamp to force fresh load, bypass any browser cache
-    const freshSrc = `${themeSong.src}?t=${Date.now()}`;
-    audio.src = freshSrc;
-    
     audioRef.current = audio;
 
     const onLoaded = () => setDuration(audio.duration || 0);
@@ -90,7 +81,6 @@ export function ThemeSongProvider({
 
     return () => {
       audio.pause();
-      audio.src = ""; // Release the audio resource
       window.clearTimeout(readyTimeout);
       audio.removeEventListener("loadedmetadata", onLoaded);
       audio.removeEventListener("timeupdate", onTime);
@@ -192,7 +182,8 @@ export function ThemeSongProvider({
         const fadeThreshold = 0.6;
         let ratio = 1;
         if (progress > fadeThreshold) {
-          ratio = 1 - Math.min(1, (progress - fadeThreshold) / (1 - fadeThreshold));
+          ratio =
+            1 - Math.min(1, (progress - fadeThreshold) / (1 - fadeThreshold));
         }
         applyFade(ratio);
         ticking = false;

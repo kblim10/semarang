@@ -1,207 +1,155 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { useThemeSong } from "@/lib/ThemeSongProvider";
 
-// Configuration
-const DISPLAY_DURATION = 4000; // 4 seconds per item
-const VIDEO_CLIP_DURATION = 4; // Play 4 seconds of video per show
+const DISPLAY_DURATION = 4500;
+const VIDEO_VOLUME = 0.45;
 
-// Define your media items here
-// Add your video and image files from public/images/ folder
-const MEDIA_ITEMS = [
-  // Videos
-  { type: "video" as const, src: "/images/1 (1).mp4" },
-  { type: "video" as const, src: "/images/1 (2).mp4" },
-  
-  // Images
-  { type: "image" as const, src: "/images/1 (1).jpeg" },
-  { type: "image" as const, src: "/images/1 (2).jpeg" },
-  { type: "image" as const, src: "/images/1 (3).jpeg" },
-  { type: "image" as const, src: "/images/1 (4).jpeg" },
-  { type: "image" as const, src: "/images/1 (5).jpeg" },
-  { type: "image" as const, src: "/images/1 (6).jpeg" },
-  { type: "image" as const, src: "/images/1 (7).jpeg" },
-  { type: "image" as const, src: "/images/1 (8).jpeg" },
-  { type: "image" as const, src: "/images/1 (9).jpeg" },
-  { type: "image" as const, src: "/images/1 (10).jpeg" },
-  { type: "image" as const, src: "/images/1 (11).jpeg" },
-  { type: "image" as const, src: "/images/1 (12).jpeg" },
-  { type: "image" as const, src: "/images/1 (13).jpeg" },
-  { type: "image" as const, src: "/images/1 (14).jpeg" },
-  { type: "image" as const, src: "/images/1 (15).jpeg" },
-  { type: "image" as const, src: "/images/1 (16).jpeg" },
+type MediaItem = { type: "video" | "image"; src: string };
+
+const ALL_MEDIA_ITEMS: MediaItem[] = [
+  { type: "video", src: "/images/1 (1).mp4" },
+  { type: "video", src: "/images/1 (2).mp4" },
+  { type: "image", src: "/images/1 (1).jpeg" },
+  { type: "image", src: "/images/1 (2).jpeg" },
+  { type: "image", src: "/images/1 (3).jpeg" },
+  { type: "image", src: "/images/1 (4).jpeg" },
+  { type: "image", src: "/images/1 (5).jpeg" },
+  { type: "image", src: "/images/1 (6).jpeg" },
+  { type: "image", src: "/images/1 (7).jpeg" },
+  { type: "image", src: "/images/1 (8).jpeg" },
+  { type: "image", src: "/images/1 (9).jpeg" },
+  { type: "image", src: "/images/1 (10).jpeg" },
+  { type: "image", src: "/images/1 (11).jpeg" },
+  { type: "image", src: "/images/1 (12).jpeg" },
+  { type: "image", src: "/images/1 (13).jpeg" },
+  { type: "image", src: "/images/1 (14).jpeg" },
+  { type: "image", src: "/images/1 (15).jpeg" },
+  { type: "image", src: "/images/1 (16).jpeg" },
 ];
 
+function shuffle<T>(items: T[]): T[] {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 /**
- * Dynamic slideshow background that syncs with the theme song.
- * Randomly switches between videos and images every few seconds.
- * Videos remember their playback position and continue from where they left off.
+ * A gentle, low-opacity memory slideshow behind the whole page. Only one
+ * media element is ever mounted at a time (no hidden decode pool), which
+ * keeps GPU/CPU load low - videos are skipped entirely on small screens
+ * since decoding video is the single most expensive part of this effect.
  */
 export function VideoBackground() {
-  const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
-  const videoPositions = useRef<Map<string, number>>(new Map());
   const { isPlaying } = useThemeSong();
-  
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [shuffledIndices, setShuffledIndices] = useState<number[]>([]);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [order, setOrder] = useState<MediaItem[]>([]);
+  const [index, setIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Shuffle array helper
-  const shuffleArray = (array: number[]) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
-  // Initialize shuffled order
   useEffect(() => {
-    const indices = Array.from({ length: MEDIA_ITEMS.length }, (_, i) => i);
-    setShuffledIndices(shuffleArray(indices));
+    // one-time read of an external system (viewport size) to decide whether
+    // video slides should even be in the rotation on this device.
+    const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+    const pool = isSmallScreen
+      ? ALL_MEDIA_ITEMS.filter((item) => item.type === "image")
+      : ALL_MEDIA_ITEMS;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOrder(shuffle(pool));
   }, []);
 
-  // Handle slideshow transitions
   useEffect(() => {
-    if (!isPlaying || shuffledIndices.length === 0) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      return;
-    }
-
-    // Start interval for switching media
-    intervalRef.current = setInterval(() => {
-      setCurrentIndex((prev) => {
-        const next = (prev + 1) % shuffledIndices.length;
-        
-        // If we've gone through all items, reshuffle for next round
-        if (next === 0) {
-          const indices = Array.from({ length: MEDIA_ITEMS.length }, (_, i) => i);
-          setShuffledIndices(shuffleArray(indices));
+    if (!isPlaying || order.length === 0) return;
+    const id = window.setInterval(() => {
+      setIndex((prev) => {
+        const next = prev + 1;
+        if (next >= order.length) {
+          setOrder(shuffle(order));
+          return 0;
         }
-        
         return next;
       });
     }, DISPLAY_DURATION);
+    return () => window.clearInterval(id);
+  }, [isPlaying, order]);
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isPlaying, shuffledIndices.length]);
+  const current = order[index];
 
-  // Handle video playback
   useEffect(() => {
-    if (shuffledIndices.length === 0) return;
-    
-    const mediaIndex = shuffledIndices[currentIndex];
-    const currentMedia = MEDIA_ITEMS[mediaIndex];
-
-    if (currentMedia.type === "video" && isPlaying) {
-      const video = videoRefs.current.get(currentMedia.src);
-      if (!video) return;
-
-      // Get or initialize position
-      const lastPosition = videoPositions.current.get(currentMedia.src) || 0;
-      
-      // Set video to last position
-      video.currentTime = lastPosition;
-      
-      // Play video
-      video.play().catch((err) => {
-        console.log("Video play prevented:", err);
+    const video = videoRef.current;
+    if (!video || !current || current.type !== "video") return;
+    video.volume = VIDEO_VOLUME;
+    video.currentTime = 0;
+    if (isPlaying) {
+      video.play().catch(() => {
+        /* autoplay with sound can be blocked - the slideshow still works visually */
       });
-
-      // After VIDEO_CLIP_DURATION seconds, pause and save position
-      const playTimeout = setTimeout(() => {
-        video.pause();
-        const newPosition = video.currentTime;
-        
-        // If video ended, reset to beginning
-        if (newPosition >= video.duration - 0.5) {
-          videoPositions.current.set(currentMedia.src, 0);
-        } else {
-          videoPositions.current.set(currentMedia.src, newPosition);
-        }
-      }, VIDEO_CLIP_DURATION * 1000);
-
-      return () => clearTimeout(playTimeout);
     }
-  }, [currentIndex, isPlaying, shuffledIndices]);
+  }, [current, isPlaying]);
 
-  if (shuffledIndices.length === 0) return null;
+  const dimClass = useMemo(
+    () => (isPlaying ? "opacity-100" : "opacity-0"),
+    [isPlaying],
+  );
 
-  const currentMediaIndex = shuffledIndices[currentIndex];
-  const currentMedia = MEDIA_ITEMS[currentMediaIndex];
+  if (!current) return null;
 
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
+      className={`pointer-events-none fixed inset-0 z-[1] overflow-hidden transition-opacity duration-1000 ${dimClass}`}
     >
-      {/* Render all videos (hidden) for preloading */}
-      <div className="hidden">
-        {MEDIA_ITEMS.filter((item) => item.type === "video").map((item) => (
-          <video
-            key={item.src}
-            ref={(el) => {
-              if (el) videoRefs.current.set(item.src, el);
-            }}
-            loop={false}
-            muted
-            playsInline
-            preload="auto"
-            onError={(e) => {
-              console.error("Video failed to load:", item.src, e);
-            }}
-            onLoadedData={() => {
-              console.log("Video loaded:", item.src);
-            }}
-          >
-            <source src={item.src} type="video/mp4" />
-          </video>
-        ))}
-      </div>
+      <AnimatePresence mode="sync">
+        <motion.div
+          key={`${current.src}-${index}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
+          {current.type === "video" ? (
+            // Videos: never cropped (object-contain). The dark navy behind
+            // it reads as intentional letterboxing rather than empty bars.
+            <video
+              ref={videoRef}
+              muted={false}
+              playsInline
+              loop
+              className="absolute inset-0 h-full w-full object-contain"
+            >
+              <source src={current.src} type="video/mp4" />
+            </video>
+          ) : (
+            <>
+              {/* soft blurred fill so the frame never shows bare edges */}
+              <Image
+                src={current.src}
+                alt=""
+                fill
+                sizes="100vw"
+                className="scale-110 object-cover blur-2xl"
+              />
+              {/* sharp, uncropped photo on top */}
+              <Image
+                src={current.src}
+                alt=""
+                fill
+                sizes="100vw"
+                className="object-contain"
+              />
+            </>
+          )}
+        </motion.div>
+      </AnimatePresence>
 
-      {/* Display current media */}
-      <div className="absolute inset-0 flex items-center justify-center bg-navy-deep">
-        {currentMedia.type === "video" ? (
-          <video
-            key={`display-${currentMedia.src}`}
-            loop={false}
-            muted
-            playsInline
-            className="min-h-full min-w-full object-cover opacity-50 transition-opacity duration-700"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <source src={currentMedia.src} type="video/mp4" />
-          </video>
-        ) : (
-          <img
-            key={`display-${currentMedia.src}`}
-            src={currentMedia.src}
-            alt=""
-            className="min-h-full min-w-full object-cover opacity-50 transition-opacity duration-700"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        )}
-      </div>
-
-      {/* Dark overlay to keep media subtle */}
-      <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/60 via-navy/50 to-navy-deep/70" />
-      
-      {/* Vignette for focus */}
+      {/* dark overlay to keep the slideshow subtle behind the content */}
+      <div className="absolute inset-0 bg-gradient-to-b from-navy-deep/65 via-navy/55 to-navy-deep/75" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_80%_at_50%_50%,transparent_40%,rgba(4,6,10,0.7)_100%)]" />
     </div>
   );
